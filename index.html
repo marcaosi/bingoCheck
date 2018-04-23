@@ -23,6 +23,12 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col">
+                <div class="alert alert-success text-center" role="alert" id="msgFinish">
+                    
+                </div>
+                <div class="alert alert-danger text-center" role="alert" id="msgError">
+                    
+                </div>
                 <form action="" id="cartela" onsubmit="fillCart(event)">
                     <div class="row">
                         <div class="col">
@@ -121,7 +127,7 @@
 
                     <div class="row">
                         <div class="col text-center">
-                            <button type="submit" class="btn btn-success btn-block">Preencher cartela</button>
+                            <button type="submit" class="btn btn-success btn-block" id="btnFillCart">Preencher cartela</button>
                         </div>
                     </div>
                 </form>
@@ -137,6 +143,12 @@
                     <div class="col">
                         <h6>Números Sorteados:</h6>
                         <p id="numbers"></p>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <button class="btn btn-light btn-block" onclick="location.reload()">Novo Jogo</button>
                     </div>
                 </div>
             </div>
@@ -196,6 +208,9 @@
         }
     }
 
+    document.getElementById('msgFinish').style.display = 'none'
+    document.getElementById('msgError').style.display = 'none'
+
     fillCart = event => {
 
         event.preventDefault()
@@ -218,16 +233,24 @@
         }
 
         let btnPlay = document.getElementById('btnPlay')
+        let btnFillCart = document.getElementById('btnFillCart')
+        let inputSorteado = document.getElementById('sorteado')
+        let msgError = document.getElementById('msgError')
         if(canPlay){
             btnPlay.disabled=false
+            btnFillCart.disabled=true
+            inputSorteado.focus()
+            msgError.style.display = 'none'
         }else{
-            alert("Você deve preencher a cartela completa para jogar")
+            msgError.style.display = 'block'
+            msgError.textContent = "Você deve preencher a cartela completa para jogar"
         }
 
     }
 
     markCel = () => {
         let num = document.getElementById('sorteado')
+        let msgFinish = document.getElementById('msgFinish')
         numbers += num.value + ' - '
         
         document.getElementById('numbers').innerHTML = numbers
@@ -238,26 +261,40 @@
             let posX = cel.charAt(0)
             let posY = cel.charAt(1)
             matriz[posX][posY] = 1
+            let inputCel = document.getElementById(`cel${cel}`)
+            inputCel.style.borderColor = 'red'
 
             //verifica se ganhou na linha
             if(verifyLine(posX)){
-                alert("Você ganhou na linha " + posX)
+                colorLine(posX, 'green')
+                finishGame()
+                msgFinish.textContent = "Você ganhou na linha " + posX
+                msgFinish.style.display = 'block'
             }
 
             //verifica se ganhou na coluna
             if(verifyColumn(posY)){
-                alert("Você ganhou na coluna " + posY)
+                colorColumn(posY, 'green')
+                finishGame()
+                msgFinish.textContent = "Você ganhou na coluna " + posY
+                msgFinish.style.display = 'block'
             }
 
             if(posX == posY){
                 // console.log('verifica se ganhou na diagonal principal')
                 if(verifyPrimaryDiag()){
-                    alert("Você ganhou na diagonal principal")
+                    colorPrimaryDiag('green')
+                    finishGame()
+                    msgFinish.textContent = "Você ganhou na diagonal principal"
+                    msgFinish.style.display = 'block'
                 }
                 if(posX == '1' || posX == '5'){
                     // console.log('verifica se ganhou nos quatro cantos')
                     if(verifyCorners()){
-                        alert("Você ganhou nos quatro cantos")
+                        colorCorners('green')
+                        finishGame()
+                        msgFinish.textContent = "Você ganhou nos quatro cantos"
+                        msgFinish.style.display = 'block'
                     }
                 }
             }
@@ -265,16 +302,48 @@
             if(parseInt(posX) + parseInt(posY) == 6){
                 // console.log('verifica diagonal secundaria')
                 if(verifySecondaryDiag()){
-                    alert("Você ganhou na diagonal secundária")
+                    colorSecondaryDiag('green')
+                    finishGame()
+                    msgFinish.textContent = "Você ganhou na diagonal secundária"
+                    msgFinish.style.display = 'block'
                 }
                 if(posX == '1' || posX == '5'){
                     // console.log('verifica se ganhou nos quatro cantos')
                     if(verifyCorners()){
-                        alert("Você ganhou nos quatro cantos")
+                        colorCorners('green')
+                        finishGame()
+                        msgFinish.textContent = "Você ganhou nos quatro cantos"
+                        msgFinish.style.display = 'block'
                     }
                 }
             }
         }
+
+        num.value = ''
+        num.focus()
+    }
+
+    finishGame = () => {
+        document.getElementById('btnPlay').disabled = true
+    }
+
+    colorColumn = (column, color) => {
+        for(let i = 1; i <= 5; i++){
+            document.getElementById(`cel${i}${column}`).style.borderColor = color
+        }
+    }
+
+    colorLine = (line, color) => {
+        for(let i = 1; i <= 5; i++){
+            document.getElementById(`cel${line}${i}`).style.borderColor = color
+        }
+    }
+
+    colorCorners = (color) => {
+        document.getElementById('cel15').style.borderColor = color
+        document.getElementById('cel11').style.borderColor = color
+        document.getElementById('cel55').style.borderColor = color
+        document.getElementById('cel51').style.borderColor = color
     }
 
     verifyCorners = () => {
@@ -305,6 +374,16 @@
         return vencedor
     }
 
+    colorPrimaryDiag = (color) => {
+        let vencedor = true
+
+        for(let i = 1; i <= 5; i++){
+            document.getElementById(`cel${i}${i}`).style.borderColor = color
+        }
+
+        return vencedor
+    }
+
     verifySecondaryDiag = () => {
         let vencedor = true
 
@@ -312,6 +391,16 @@
             if(matriz[i][6-i] == 0){
                 vencedor = false;
             }
+        }
+
+        return vencedor
+    }
+
+    colorSecondaryDiag = (color) => {
+        let vencedor = true
+
+        for(let i = 1; i <= 5; i++){
+            document.getElementById(`cel${i}${6-i}`).style.borderColor = color
         }
 
         return vencedor
