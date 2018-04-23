@@ -129,7 +129,7 @@
                 <div class="row">
                     <div class="col">
                         <input type="text" class="form-control text-center" id="sorteado">&nbsp;
-                        <button class="btn btn-success btn-block" onclick="markCel()">Jogar</button>
+                        <button class="btn btn-success btn-block" onclick="markCel()" disabled id="btnPlay">Jogar</button>
                     </div>
                 </div>
 
@@ -146,41 +146,41 @@
 
 <script>
 
-    // let cartelaTest = {
-    //     1: 11,
-    //     4: 21,
-    //     7: 31,
-    //     3: 41,
-    //     12: 51,
-    //     16: 12,
-    //     18: 22,
-    //     21: 32,
-    //     24: 42,
-    //     30: 52,
-    //     33: 13,
-    //     38: 23,
-    //     45: 43,
-    //     42: 53,
-    //     50:14,
-    //     58:24,
-    //     47:34,
-    //     49:44,
-    //     55:54,
-    //     61:15,
-    //     66:25,
-    //     69:35,
-    //     72:45,
-    //     75:55
-    // }
+    let cartelaTest = {
+        1: 11,
+        4: 21,
+        7: 31,
+        3: 41,
+        12: 51,
+        16: 12,
+        18: 22,
+        21: 32,
+        24: 42,
+        30: 52,
+        33: 13,
+        38: 23,
+        45: 43,
+        42: 53,
+        50:14,
+        58:24,
+        47:34,
+        49:44,
+        55:54,
+        61:15,
+        66:25,
+        69:35,
+        72:45,
+        75:55
+    }
 
-    // let keys = Object.keys(cartelaTest)
+    let keys = Object.keys(cartelaTest)
 
-    // keys.forEach(key => {
-    //     let cel = document.getElementById(`cel${cartelaTest[key]}`)
-    //     if(cel != null){
-    //         cel.value = key
-    //     }
-    // })
+    keys.forEach(key => {
+        let cel = document.getElementById(`cel${cartelaTest[key]}`)
+        if(cel != null){
+            cel.value = key
+        }
+    })
 
     let matriz = {}
     let cartela = {}
@@ -200,10 +200,16 @@
 
         event.preventDefault()
 
+        let canPlay = true
+
         for(let i = 1; i <= 5; ++i){
             for(let j = 1; j <= 5; j++){
                 
                 let cel = document.getElementById(`cel${i}${j}`)
+
+                if(!cel.value){
+                    canPlay = false
+                }
 
                 if(!(i == 3 && j == 3)){
                     cartela[cel.value] = `${i}${j}`
@@ -211,7 +217,13 @@
             }
         }
 
-        console.log(cartela)
+        let btnPlay = document.getElementById('btnPlay')
+        if(canPlay){
+            btnPlay.disabled=false
+        }else{
+            alert("Você deve preencher a cartela completa para jogar")
+        }
+
     }
 
     markCel = () => {
