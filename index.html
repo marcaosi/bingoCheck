@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>BingoCheck</title>
+    <link rel="icon" href="favicon.png"/>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+
+    <style>
+        .row{
+            margin: 15px 0;
+        }
+
+        .col{
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <form action="" id="cartela" onsubmit="fillCart(event)">
+                    <div class="row">
+                        <div class="col">
+                            <h3 class="text-center">B</h3>
+                            <input type="text" class="form-control text-center" id="cel11">
+                        </div>
+                        <div class="col">
+                            <h3 class="text-center">I</h3>
+                            <input type="text" class="form-control text-center" id="cel12">
+                        </div>
+                        <div class="col">
+                            <h3 class="text-center">N</h3>
+                            <input type="text" class="form-control text-center" id="cel13">
+                        </div>
+                        <div class="col">
+                            <h3 class="text-center">G</h3>
+                            <input type="text" class="form-control text-center" id="cel14">
+                        </div>
+                        <div class="col">
+                            <h3 class="text-center">O</h3>
+                            <input type="text" class="form-control text-center" id="cel15">
+                        </div>
+                    </div>
+                
+                    <div class="row">
+                        <div class="col">
+                            <input type="text" class="form-control text-center" id="cel21">
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control text-center" id="cel22">
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control text-center" id="cel23">
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control text-center" id="cel24">
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control text-center" id="cel25">
+                        </div>
+                    </div>
+                
+                    <div class="row">
+                        <div class="col">
+                            <input type="text" class="form-control text-center" id="cel31">
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control text-center" id="cel32">
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control text-center" id="cel33" disabled value="X">
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control text-center" id="cel34">
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control text-center" id="cel35">
+                        </div>
+                    </div>
+                
+                    <div class="row">
+                        <div class="col">
+                            <input type="text" class="form-control text-center" id="cel41">
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control text-center" id="cel42">
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control text-center" id="cel43">
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control text-center" id="cel44">
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control text-center" id="cel45">
+                        </div>
+                    </div>
+                
+                    <div class="row">
+                        <div class="col">
+                            <input type="text" class="form-control text-center" id="cel51">
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control text-center" id="cel52">
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control text-center" id="cel53">
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control text-center" id="cel54">
+                        </div>
+                        <div class="col">
+                            <input type="text" class="form-control text-center" id="cel55">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col text-center">
+                            <button type="submit" class="btn btn-success btn-block">Preencher cartela</button>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="row">
+                    <div class="col form-inline">
+                        <input type="text" class="form-control text-center" id="sorteado">&nbsp;
+                        <button class="btn btn-success" onclick="markCel()">Jogar</button>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <h6>Números Sorteados:</h6>
+                        <p id="numbers"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+
+    let cartelaTest = {
+        1: 11,
+        4: 21,
+        7: 31,
+        3: 41,
+        12: 51,
+        16: 12,
+        18: 22,
+        21: 32,
+        24: 42,
+        30: 52,
+        33: 13,
+        38: 23,
+        45: 43,
+        42: 53,
+        50:14,
+        58:24,
+        47:34,
+        49:44,
+        55:54,
+        61:15,
+        66:25,
+        69:35,
+        72:45,
+        75:55
+    }
+
+    let keys = Object.keys(cartelaTest)
+
+    keys.forEach(key => {
+        let cel = document.getElementById(`cel${cartelaTest[key]}`)
+        if(cel != null){
+            cel.value = key
+        }
+    })
+
+    let matriz = {}
+    let cartela = {}
+    let numbers = ''
+
+    for(let i = 1; i <= 5; ++i){
+        matriz[i] = {}
+        for(let j = 1; j <= 5; j++){
+            matriz[i][j] = 0
+            if(i == 3 && j == 3){
+                matriz[i][j] = 1
+            }
+        }
+    }
+
+    fillCart = event => {
+
+        event.preventDefault()
+
+        for(let i = 1; i <= 5; ++i){
+            for(let j = 1; j <= 5; j++){
+                
+                let cel = document.getElementById(`cel${i}${j}`)
+
+                if(!(i == 3 && j == 3)){
+                    cartela[cel.value] = `${i}${j}`
+                }
+            }
+        }
+
+        console.log(cartela)
+    }
+
+    markCel = () => {
+        let num = document.getElementById('sorteado')
+        numbers += num.value + ' - '
+        
+        document.getElementById('numbers').innerHTML = numbers
+
+        let cel = cartela[num.value]
+
+        if(cel != null){
+            let posX = cel.charAt(0)
+            let posY = cel.charAt(1)
+            matriz[posX][posY] = 1
+
+            //verifica se ganhou na linha
+            if(verifyLine(posX)){
+                alert("Você ganhou na linha " + posX)
+            }
+
+            //verifica se ganhou na coluna
+            if(verifyColumn(posY)){
+                alert("Você ganhou na coluna " + posY)
+            }
+
+            if(posX == posY){
+                // console.log('verifica se ganhou na diagonal principal')
+                if(verifyPrimaryDiag()){
+                    alert("Você ganhou na diagonal principal")
+                }
+                if(posX == '1' || posX == '5'){
+                    // console.log('verifica se ganhou nos quatro cantos')
+                    if(verifyCorners()){
+                        alert("Você ganhou nos quatro cantos")
+                    }
+                }
+            }
+
+            if(parseInt(posX) + parseInt(posY) == 6){
+                // console.log('verifica diagonal secundaria')
+                if(verifySecondaryDiag()){
+                    alert("Você ganhou na diagonal secundária")
+                }
+                if(posX == '1' || posX == '5'){
+                    // console.log('verifica se ganhou nos quatro cantos')
+                    if(verifyCorners()){
+                        alert("Você ganhou nos quatro cantos")
+                    }
+                }
+            }
+        }
+    }
+
+    verifyCorners = () => {
+        let vencedor = true
+
+        if(matriz[1][5] == 0){
+            vencedor = false
+        }else if(matriz[1][1] == 0){
+            vencedor = false
+        }else if(matriz[5][5] == 0){
+            vencedor = false
+        }else if(matriz[5][1] == 0){
+            vencedor = false
+        }
+
+        return vencedor
+    }
+
+    verifyPrimaryDiag = () => {
+        let vencedor = true
+
+        for(let i = 1; i <= 5; i++){
+            if(matriz[i][i] == 0){
+                vencedor = false;
+            }
+        }
+
+        return vencedor
+    }
+
+    verifySecondaryDiag = () => {
+        let vencedor = true
+
+        for(let i = 1; i <= 5; i++){
+            if(matriz[i][6-i] == 0){
+                vencedor = false;
+            }
+        }
+
+        return vencedor
+    }
+
+    verifyLine = (posX) => {
+        let vencedor = true
+        for(let i = 1; i <= 5; i++){
+            if(matriz[posX][i] == 0){
+                vencedor = false;
+            }
+        }
+        return vencedor
+    }
+
+    verifyColumn = (posY) => {
+        let vencedor = true
+        for(let i = 1; i <= 5; i++){
+            if(matriz[i][posY] == 0){
+                vencedor = false;
+            }
+        }
+        return vencedor
+    }
+</script>
+
+</html>
